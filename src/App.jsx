@@ -1,13 +1,13 @@
-
+import Navbar from "./components/Navbar"
+import Router from "./routes/Router"
 
 function App() {
 
 
   return (
-   <div>
-    <h1>Expense Tracker</h1>
-   </div>
-      
+      <div>
+        <Router/>
+      </div>
   )
 }
 
