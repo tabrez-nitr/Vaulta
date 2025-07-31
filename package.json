@@ -12,9 +12,11 @@
   "dependencies": {
     "@react-router/node": "^7.6.3",
     "@tailwindcss/vite": "^4.1.11",
+    "date-fns": "^4.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.6.3",
+    "react-toastify": "^11.0.5",
     "remixicon": "^4.6.0",
     "tailwindcss": "^4.1.11",
     "uuid": "^11.1.0"

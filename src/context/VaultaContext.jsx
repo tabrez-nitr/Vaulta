@@ -22,6 +22,7 @@ export const VaultaContextProvider = ({children}) =>{
       const [ totalpandl , setTotalPandL ] = useState(0) // to calculate total profit and loss this month
       const [ totalExpenses , setTotalExpenses] = useState(0) // to store total expenses
       const [ totalProfit , setTotalProfit ] = useState(0) // to store total profit 
+    
        
       // updates the account when new transcition is added 
       const updateAccount = (amt , isDebit) =>{
@@ -36,16 +37,16 @@ export const VaultaContextProvider = ({children}) =>{
             setTotalProfit((prev) => (prev+amt))
           }
       }
-
+        // if not defined is debit so it may show some error 
       const deleteTranscition = (id) => {
          
-        storeElem.find((el) =>{ 
-        if(el.id === id){
-           updateAccount(el.amt , isDebit) // to update all balance sheet before deleting 
-        }
-        return false; })
+        // storeElem.find((el) =>{ 
+        // if(el.id === id){
+        //    updateAccount(el.amt , isDebit) // to update all balance sheet before deleting 
+        // }
+        // return false; })
 
-        setStoreElem.filter((elem) => elem.id !== id ) // deleting this transition 
+        setStoreElem(storeElem.filter(elem => elem.id !== id)) // deleting this transition 
       }
 
 

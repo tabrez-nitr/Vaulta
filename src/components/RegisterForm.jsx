@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useVaulta } from '../context/VaultaContext'
 import { v4 as uuidv4 } from 'uuid';
+import { format } from "date-fns";
+ import {  toast , Slide} from 'react-toastify';
 
 
 function RegisterForm() {
+
+      // take cuurent date 
+      const now = new Date();
+      const formattedDateTime = format(now, "do MMMM yyyy  hh:mm a");
 
      const [amt , setAmt] = useState("")
      const [description , setDescription] =  useState("")
@@ -19,16 +25,19 @@ function RegisterForm() {
 
 
     //  used to store transcition 
-     const addTransation = (e) =>{
+ const addTransation = (e) =>{
       e.preventDefault();
       console.log(amt)
+      if(amt == "")
+        return
         // update amt and other calculation using context
         console.log("inside add Transition ")
              updateAccount( amt , isDebit) // here amt will be updated 
             
              // create new transaction 
              const newTransaction = {
-               id : uuidv4(),
+                date: formattedDateTime,
+                id : uuidv4(),
                 amount : amt ,
                 description : description,
                 isDebit : isDebit
@@ -43,31 +52,46 @@ function RegisterForm() {
              console.log(storeElem);
              console.log(amt)
 
+             // toats feature interaction 
+             toast.success('New Transaction Added', {
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            transition: Slide,
+           });
+
      }
 
      
 
   return (
-    <div className='flex justify-center mt-10 '>
+    <div className='flex justify-center mt-10  '>
       <div className=' flex justify-center'>
-      <form onSubmit={addTransation} className='border-1 p-5' >
+      <form onSubmit={addTransation} className=' p-4 border-[#113F67] rounded-[4px] shadow-xl' >
+         <h1  className='font-semibold mb-3'>New Transaction </h1>
         <div className='flex gap-5'>
-          <div className={`border-1 flex rounded-[8px] ${isDebit ? "border-[#E74C3C]" : "border-[#00A65A]"}`}>
+          <div className={`border-1 flex rounded-[4px] ${isDebit ? "border-[#E74C3C]" : "border-[#00A65A]"}`}>
         <div className={`pl-2 py-2 text-2xl flex justify-center ${isDebit ? 'text-[#E74C3C]' : 'text-[#00A65A]'}`}>
          ₹
        </div>
        <input type="number" className={`w-100 h-12 p-3 text-2xl focus:outline-none ${isDebit ? "text-[#E74C3C] placeholder:text-[#E74C3C]/60" : "text-[#00A65A] placeholder:text-[#00A65A]/60"}`} placeholder='Enter amount' value={amt} onChange={(e)=>setAmt(e.target.value)} />
        </div>
-       <div className={` flex justify-center p-[1px] rounded-[8px]  transition-opacity ${isDebit ? "border-2 border-[#E74C3C]" : ""} `}>
-      <button type='button' className={`border-1 p-2 w-22 rounded-[8px]   cursor-pointer text-white bg-[#E74C3C]`} onClick={() => setIsDebit(true)}>Debit ₹</button>
+       <div className={` flex justify-center p-[1px] rounded-[5px]  transition-opacity ${isDebit ? "border-2 border-[#E74C3C]" : ""} `}>
+      <button type='button' className={`border-1 p-2 w-50 rounded-[4px]   cursor-pointer text-white bg-[#E74C3C]`} onClick={() => setIsDebit(true)}>Debit ₹</button>
       </div>
-      <div className={` flex justify-center p-[1px] rounded-[8px]  text-white transition-opacity ${isDebit ? "" : "border-2 border-[#00A65A]"}`}>
-      <button type='button' className={`border-1 p-2 w-22 rounded-[8px]   cursor-pointer bg-[#00A65A] `}  onClick={() => setIsDebit(false)}>Credit ₹</button>
+      <div className={` flex justify-center p-[1px] rounded-[5px]  text-white transition-opacity ${isDebit ? "" : "border-2 border-[#00A65A]"}`}>
+      <button type='button' className={`border-1 p-2 w-50 rounded-[4px]   cursor-pointer bg-[#00A65A] `}  onClick={() => setIsDebit(false)}>Credit ₹</button>
       </div>
         </div><br />
-       <input className='w-full p-3 border-1 mb-5 focus:outline-none'  type="text" placeholder='Enter details (Items , bill no , quantity , etc)' value={description} onChange={(e)=>setDescription(e.target.value)} /><br />
-
-       <button type='submit' className='border-1 p-2'> Add Transition </button>   
+       <textarea className='w-full h-[10vh] p-3 border-1 mb-5 focus:outline-none rounded-[4px] border-[#113F67]'  type="text" placeholder='Enter details (Items , bill no , quantity , etc)' value={description} onChange={(e)=>setDescription(e.target.value)} /><br />
+       <div className='flex justify-end'>
+       <button type='submit' className=' p-3 rounded-[4px] bg-[#3B38A0] text-white '> Add Transaction</button>
+       </div>   
       </form>
       </div>
     </div>
