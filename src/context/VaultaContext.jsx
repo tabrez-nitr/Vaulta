@@ -26,33 +26,53 @@ export const VaultaContextProvider = ({children}) =>{
        
       // updates the account when new transcition is added 
       const updateAccount = (amt , isDebit) =>{
+          const amount = Number(amt)
           if(isDebit == true)
           {
-            setTotalPandL((prev)=> (prev-amt))
-            setTotalExpenses((prev)=>(prev+amt))
+            const newTotalPandL = totalpandl - amount;
+            setTotalPandL(newTotalPandL)
+            const newTotalExpenses = totalExpenses + amount;
+            setTotalExpenses(newTotalExpenses)
           }
           else
           {
-            setTotalPandL((prev)=> (prev+amt))
-            setTotalProfit((prev) => (prev+amt))
+            const newTotalPandL = totalpandl + amount;
+            setTotalPandL(newTotalPandL)
+            const newTotalProfit = totalProfit + amount;
+            setTotalProfit(newTotalProfit)
+
           }
+
+
+          console.log("Net Amount :" +  totalpandl )
       }
         // if not defined is debit so it may show some error 
-      const deleteTranscition = (id) => {
-         
-        // storeElem.find((el) =>{ 
-        // if(el.id === id){
-        //    updateAccount(el.amt , isDebit) // to update all balance sheet before deleting 
-        // }
-        // return false; })
 
+
+      const deleteTranscition = (id , isDebit , amt) => {
+         
+        
+        if(el.id === id){
+           if(isDebit)
+            {
+              setTotalPandL((prev) => prev + Number(el.amount))
+              setTotalExpenses((prev) => prev - Number(el.amount))
+            } 
+            else{
+              setTotalPandL((prev) => prev - Number(el.amount))
+              setTotalProfit((prev) => prev - Number(el.amount))
+            }
+            // to update all balance sheet before deleting 
+
+        }
+      
         setStoreElem(storeElem.filter(elem => elem.id !== id)) // deleting this transition 
       }
 
 
     return(
-        <VaultaContext.Provider value={{storeElem , setStoreElem , totalpandl , totalExpenses , setTotalExpenses , totalProfit , setTotalProfit, deleteTranscition , updateAccount }} >
+        <VaultaContext.Provider value={{ storeElem , setStoreElem , totalpandl , totalExpenses , setTotalExpenses , totalProfit , setTotalProfit , deleteTranscition , updateAccount }} >
             {children}
         </VaultaContext.Provider>
-    )
-}
+          )
+ }

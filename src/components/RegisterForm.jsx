@@ -20,19 +20,19 @@ function RegisterForm() {
      const  { updateAccount , setStoreElem , storeElem } = useVaulta()
 
      useEffect(() => {
-  console.log("storeElem updated", storeElem);
-}, [storeElem])
+    console.log("storeElem updated", storeElem);
+   }, [storeElem])
 
 
     //  used to store transcition 
- const addTransation = (e) =>{
+     const addTransation = (e) =>{
       e.preventDefault();
       console.log(amt)
       if(amt == "")
         return
         // update amt and other calculation using context
-        console.log("inside add Transition ")
-             updateAccount( amt , isDebit) // here amt will be updated 
+         console.log("inside add Transition ")
+         updateAccount( amt , isDebit) // here amt will be updated 
             
              // create new transaction 
              const newTransaction = {
@@ -45,6 +45,8 @@ function RegisterForm() {
            
             const newStoreElem = [newTransaction , ...storeElem]
             setStoreElem(newStoreElem)
+
+            // reset values to original values 
             setAmt("")
             setDescription("")
             setIsDebit(true)
@@ -53,7 +55,7 @@ function RegisterForm() {
              console.log(amt)
 
              // toats feature interaction 
-             toast.success('New Transaction Added', {
+            toast.success('New Transaction Added', {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,

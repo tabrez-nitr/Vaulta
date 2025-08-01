@@ -15,13 +15,13 @@ function ViewTransation() {
                 <div className='flex justify-between'>
                 <h1 className='text-[13px]'>{elem.date}</h1>
                 <div className='text-[13px] flex gap-4'>
-                <button className=' cursor-pointer rounded ' >Edit <i className="ri-edit-fill"></i> </button>
-                <button className=' cursor-pointer rounded ' 
-                onClick={(e) => {e.preventDefault(); deleteTranscition(elem.id)}}>Delete <i className="ri-delete-bin-7-fill"></i> </button>
+                <button className=' cursor-pointer rounded hover:opacity-70' >Edit <i className="ri-edit-fill"></i> </button>
+                <button className=' cursor-pointer rounded hover:opacity-70' 
+                onClick={(e) => {e.preventDefault(); deleteTranscition(elem.id , elem.isDebit , elem.amount)}}>Delete <i className="ri-delete-bin-7-fill"></i> </button>
                 </div>
                 </div>
                 <div className=' gap-10 text-2xl mt-3'>
-                <h1 className={`text-2xl font-semibold ${elem.isDebit ? "text-red-500" : "text-green-500" }`}>₹ {elem.amount}</h1>
+                <h1 className={`text-2xl font-semibold ${elem.isDebit ? "text-red-500" : "text-green-600" }`}>₹ {elem.amount}</h1>
                 <h1 className='mt-2 text-[16px] text-[#113F67]/80'>{elem.description}</h1>
                 
                 </div>
