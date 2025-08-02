@@ -50,22 +50,20 @@ export const VaultaContextProvider = ({children}) =>{
 
 
       const deleteTranscition = (id , isDebit , amt) => {
-         
+           
+           const amount = Number(amt);
+           
         
-        if(el.id === id){
            if(isDebit)
             {
-              setTotalPandL((prev) => prev + Number(el.amount))
-              setTotalExpenses((prev) => prev - Number(el.amount))
+              setTotalPandL((prev) => prev + amount)
+              setTotalExpenses((prev) => prev - amount)
             } 
             else{
-              setTotalPandL((prev) => prev - Number(el.amount))
-              setTotalProfit((prev) => prev - Number(el.amount))
+              setTotalPandL((prev) => prev - amount)
+              setTotalProfit((prev) => prev - amount)
             }
             // to update all balance sheet before deleting 
-
-        }
-      
         setStoreElem(storeElem.filter(elem => elem.id !== id)) // deleting this transition 
       }
 
