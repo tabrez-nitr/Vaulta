@@ -19,6 +19,8 @@ function MainApp() {
    
 
   return (
+    <div className='grid grid-cols-[1.7fr_8fr]'>
+    <Sidebar/>
     <div className='px-12 py-8'>
       <div className=''>
         <h1 className=' text-3xl font-semibold'>Transaction Tracker</h1>
@@ -31,9 +33,9 @@ function MainApp() {
           <div className='font-semibold text-[18px]'>Recent Transactions</div>
           <button className='border px-7 py-1 bg-[#3B38A0] text-white rounded-[4px]' onClick={(e)=> {e.preventDefault(); setTransactionBtn(true);}}> <i className="ri-add-line"></i> Add Transaction</button>
         </div>
-        <ViewTransation/>
+        <ViewTransation/> 
+    </div>
 
-       
     </div>
   )
 }

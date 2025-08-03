@@ -81,7 +81,7 @@ function RegisterForm() {
   return (
     <div className='flex justify-center mt-40  '>
       <div className=' flex justify-center'>
-      <form onSubmit={addTransation} className=' p-4 border-[#113F67] rounded-[4px] shadow-xl' >
+      <form onSubmit={addTransation} className=' p-9 rounded-[4px] border-1 border-[black]/20 shadow-xl' >
          <h1  className='font-semibold mb-3'>New Transaction </h1>
         <div className='flex gap-5'>
           <div className={`border-1 flex rounded-[4px] ${isDebit ? "border-[#E74C3C]" : "border-[#00A65A]"}`}>

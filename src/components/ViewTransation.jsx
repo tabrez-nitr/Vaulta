@@ -6,25 +6,30 @@ function ViewTransation() {
     const { storeElem , deleteTranscition } = useVaulta();
 
   return (
-    <div className='mt-12 '>
+    <div className=' '>
     <div className=' text-black mt-4'>  
-        <div className='grid grid-cols-2 gap-8'>
+        <div className='h-[60vh] overflow-y-auto gap-6 p-2'>
         {storeElem && storeElem.map((elem) => (
-             <div key={elem.id} className={` text-[#113F67] transition-all duration-200 ease-in-out p-4  px-7 w-[40vw]   rounded-[2px] ${elem.isDebit ? 'border-l-[4px] border-red-500 bg-red-100' : 'border-l-[4px] border-green-500 bg-green-200'} hover:scale-[1.01] hover:shadow` }>
+             <div key={elem.id} className={` text-[#113F67] mt-5 transition-all duration-200 ease-in-out p-3  px-7 rounded-[8px]    ${elem.isDebit ? 'border-[1px] border-red-300 bg-red-100' : 'border-[1px] border-green-500 bg-green-200'} hover:scale-[1.01] hover:shadow` }>
+                <div className='flex justify-between'>
+                  <div>
                 <div className='flex justify-between'>
                 <h1 className='text-[13px]'>{elem.date}</h1>
-                <div className='text-[13px] flex gap-4'>
+                </div>
+                <div className=' gap-10 text-2xl mt-1'>
+                <h1 className={`text-2xl font-semibold ${elem.isDebit ? "text-red-500" : "text-green-600" }`}>₹ {elem.amount}</h1>
+                <h1 className=' text-[13px] text-[#113F67]/80'>{elem.description}</h1>
+                
+                </div>
+                </div>
+
+            
+             <div className='text-[13px] flex gap-4'>
                 <button className=' cursor-pointer rounded hover:opacity-70' >Edit <i className="ri-edit-fill"></i> </button>
                 <button className=' cursor-pointer rounded hover:opacity-70' 
                 onClick={(e) => {e.preventDefault(); deleteTranscition(elem.id , elem.isDebit , elem.amount)}}>Delete <i className="ri-delete-bin-7-fill"></i> </button>
                 </div>
                 </div>
-                <div className=' gap-10 text-2xl mt-3'>
-                <h1 className={`text-2xl font-semibold ${elem.isDebit ? "text-red-500" : "text-green-600" }`}>₹ {elem.amount}</h1>
-                <h1 className='mt-2 text-[16px] text-[#113F67]/80'>{elem.description}</h1>
-                
-                </div>
-
             </div>
         ))}
         </div>
