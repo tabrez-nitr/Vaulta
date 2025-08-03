@@ -7,6 +7,8 @@ import { format } from "date-fns";
 
 function RegisterForm() {
 
+     console.log("register form mounted")
+
       // take cuurent date 
       const now = new Date();
       const formattedDateTime = format(now, "do MMMM yyyy  hh:mm a");
@@ -17,7 +19,7 @@ function RegisterForm() {
      
      const [ isDebit , setIsDebit ] = useState(true) // checks if it is debit or credit amt intially it will be true 
     //   take all necessary  variables using provider
-     const  { updateAccount , setStoreElem , storeElem } = useVaulta()
+     const  { updateAccount , setStoreElem , storeElem , transactionBtn , setTransactionBtn } = useVaulta()
 
      useEffect(() => {
     console.log("storeElem updated", storeElem);
@@ -26,6 +28,11 @@ function RegisterForm() {
 
     //  used to store transcition 
      const addTransation = (e) =>{
+
+      // changing transaction btn 
+      setTransactionBtn(false)
+
+
       e.preventDefault();
       console.log(amt)
       if(amt == "")
@@ -72,7 +79,7 @@ function RegisterForm() {
      
 
   return (
-    <div className='flex justify-center mt-10  '>
+    <div className='flex justify-center mt-40  '>
       <div className=' flex justify-center'>
       <form onSubmit={addTransation} className=' p-4 border-[#113F67] rounded-[4px] shadow-xl' >
          <h1  className='font-semibold mb-3'>New Transaction </h1>

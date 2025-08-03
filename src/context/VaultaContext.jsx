@@ -12,6 +12,11 @@ export const useVaulta = () =>
 
 export const VaultaContextProvider = ({children}) =>{
 
+
+     // elemeent for better ux adding a btn to show register form inside blank page 
+     const[ transactionBtn , setTransactionBtn ] = useState(false)
+
+
       const [ storeElem , setStoreElem ] = useState([]) // to store indivuial tranction 
     //   id : 
     //   date : ,
@@ -69,7 +74,7 @@ export const VaultaContextProvider = ({children}) =>{
 
 
     return(
-        <VaultaContext.Provider value={{ storeElem , setStoreElem , totalpandl , totalExpenses , setTotalExpenses , totalProfit , setTotalProfit , deleteTranscition , updateAccount }} >
+        <VaultaContext.Provider value={{ storeElem , setStoreElem , totalpandl , totalExpenses , setTotalExpenses , totalProfit , setTotalProfit , deleteTranscition , updateAccount , transactionBtn , setTransactionBtn}} >
             {children}
         </VaultaContext.Provider>
           )

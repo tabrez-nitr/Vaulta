@@ -6,12 +6,11 @@ function ViewTransation() {
     const { storeElem , deleteTranscition } = useVaulta();
 
   return (
-     <div className='mt-12'>
-     { storeElem.length !== 0 && <h1 className='font-semibold ml-50'>Recent Transactions </h1> }
-    <div className='flex  justify-center text-black mt-4'>  
-        <div className='grid grid-cols-2 gap-4'>
+    <div className='mt-12 '>
+    <div className=' text-black mt-4'>  
+        <div className='grid grid-cols-2 gap-8'>
         {storeElem && storeElem.map((elem) => (
-             <div key={elem.id} className={` text-[#113F67] transition-all duration-200 ease-in-out p-3 px-7 w-[36vw]   rounded-[2px] ${elem.isDebit ? 'border-l-[4px] border-red-500 bg-red-100' : 'border-l-[4px] border-green-500 bg-green-200'} hover:scale-[1.01] hover:shadow` }>
+             <div key={elem.id} className={` text-[#113F67] transition-all duration-200 ease-in-out p-4  px-7 w-[40vw]   rounded-[2px] ${elem.isDebit ? 'border-l-[4px] border-red-500 bg-red-100' : 'border-l-[4px] border-green-500 bg-green-200'} hover:scale-[1.01] hover:shadow` }>
                 <div className='flex justify-between'>
                 <h1 className='text-[13px]'>{elem.date}</h1>
                 <div className='text-[13px] flex gap-4'>
