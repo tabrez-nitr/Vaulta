@@ -16,7 +16,10 @@ function Account() {
 
             {/* for net balance */}
             <div className='border-1 p-5 border-[black]/30 rounded-[8px] shadow-xl'>
+              <div className='flex justify-between'>
                <span className='text-[13px] text-black/60'>Net Balance</span>
+               <i className="text-xl text-[black]/60 ri-bank-fill"></i>
+               </div>
                <h1 className={` text-[30px]  font-semibold ${ totalpandl>=0 ? 'text-green-600' : 'text-red-500'} `}>₹ {totalpandl}</h1>
             </div>
             {/* for spent and got  */}

@@ -18,6 +18,21 @@ export const VaultaContextProvider = ({children}) =>{
 
 
       const [ storeElem , setStoreElem ] = useState([]) // to store indivuial tranction 
+
+      // [{
+      //   id : 1,
+      //   name : janurary,
+      //   transactions : [
+      //     {
+      //       id :, 
+      //       date :,
+      //       amount : ,
+      //       isDebit : ,
+      //       description : ,
+      //       category : ,
+      //     }
+      //   ]
+      // }]
     //   id : 
     //   date : ,
     //   amount : ,
