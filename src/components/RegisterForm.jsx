@@ -19,40 +19,48 @@ function RegisterForm() {
      
      const [ isDebit , setIsDebit ] = useState(true) // checks if it is debit or credit amt intially it will be true 
     //   take all necessary  variables using provider
-     const  { updateAccount , setStoreElem , storeElem , transactionBtn , setTransactionBtn } = useVaulta()
+     const  { updateAccount , setStoreElem , storeElem , transactionBtn , setTransactionBtn , notionId } = useVaulta()
 
      useEffect(() => {
     console.log("storeElem updated", storeElem);
    }, [storeElem])
 
 
-    //  used to store transcition 
+   //  used to store transcition 
      const addTransation = (e) =>{
-
-      // changing transaction btn 
+      // changing transaction btn for empty page only for register form 
       setTransactionBtn(false)
-
 
       e.preventDefault();
       console.log(amt)
       if(amt == "")
         return
         // update amt and other calculation using context
-         console.log("inside add Transition ")
-         updateAccount( amt , isDebit) // here amt will be updated 
+        console.log("inside add Transition ")
+        updateAccount( amt , isDebit) // here amt will be updated 
             
-             // create new transaction 
-             const newTransaction = {
+         // create new transaction 
+           const newTransaction = {
                 date: formattedDateTime,
                 id : uuidv4(),
                 amount : amt ,
                 description : description,
                 isDebit : isDebit
              }
-           
-            const newStoreElem = [newTransaction , ...storeElem]
-            setStoreElem(newStoreElem)
+              
+          
 
+            setStoreElem((prevElem) => { // we are using prev state to get hold of all the elemes
+              return prevElem.map((elem) => {  // map through each element (map gives a new array) and check which id matches
+                    if (elem.id === notionId) { //when the id is matched 
+                       return { //we return new object inside it with prev values and new transactions
+                           ...elem,
+                            transactions: [...elem.transactions, newTransaction],
+                             };
+                          }
+                     return elem;
+                  });
+            });
             // reset values to original values 
             setAmt("")
             setDescription("")

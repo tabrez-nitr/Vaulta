@@ -14,10 +14,12 @@ function Sidebar() {
     const [ inputNotionCardName , setInputNotionCardName] = useState(false); // to diplay input name when the user clicks add new page 
 
     
+    // creates new page or card like notion 
     const notionCard = () => {
       setStoreElem([ {
         id :  uuidv4(),
-
+        name : notionCardName ,
+        transactions : []
       } ,...storeElem])
     }
 
@@ -37,16 +39,15 @@ function Sidebar() {
 
           {/* input name for notion card  */}
           { inputNotionCardName && 
-            <div className='mt-5 border-b p-1'>
+            <div className='mt-2 border-b px-1'>
               <input type="text" className='outline-none' value={notionCardName} onChange={(e) => setNotionCardName(e.target.value)} />
               <button className='text-[18px] font-semibold'><i className="ri-check-fill"></i></button>
             </div>
           }
 
-
-
-
-
+          <div className='mt-2'>
+            Jan
+          </div>
 
 
           <button className='fixed bottom-5   flex gap-2 text-[black]/60 hover:text-red-400'><i className="text-[18px] ri-logout-box-r-line"></i><div className='flex items-center'>Logout</div></button>
