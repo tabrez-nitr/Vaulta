@@ -1,0 +1,45 @@
+import React, { useState } from 'react'
+import Sidebar from '../components/Sidebar'
+import RegisterForm from '../components/RegisterForm'
+import ViewTransation from '../components/ViewTransation'
+import Account from '../components/Account'
+import { useVaulta } from '../context/VaultaContext'
+  
+
+  function MainApp() {
+  const { transactionBtn, setTransactionBtn } = useVaulta();
+
+  return (
+    <div>
+      {transactionBtn ? (
+        <RegisterForm />
+      ) : (
+        <div className='grid grid-cols-[1.7fr_8fr]'>
+          <Sidebar />
+          <div className='px-12 py-8'>
+            <div>
+              <h1 className='text-3xl font-semibold'>Transaction Tracker</h1>
+              <p className='text-[13px] text-black/55'>Welcome back, manage your finances with ease.</p>
+            </div>
+
+            <Account />
+
+            <div className='flex justify-between mt-17'>
+              <div className='font-semibold text-[18px]'>Recent Transactions</div>
+              <button
+                className='border px-7 py-1 bg-[#3B38A0] text-white rounded-[4px]'
+                onClick={() => setTransactionBtn(true)}
+              >
+                <i className='ri-add-line'></i> Add Transaction
+              </button>
+            </div>
+
+            <ViewTransation />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default MainApp
