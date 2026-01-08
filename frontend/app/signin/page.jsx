@@ -12,7 +12,7 @@ function Page() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const server_api = process.env.NEXT_PUBLIC_SERVER_API || 'http://localhost:8000/'
+    const server_api = process.env.NEXT_PUBLIC_SERVER_API || 'http://localhost:8000'
 
     // 2. Handle Input Change
     const handleChange = (e) => {
@@ -27,15 +27,15 @@ function Page() {
         e.preventDefault();
         setIsLoading(true);
         setError('');
-
         try {
             // Sending POST request to /login endpoint
-            const response = await fetch(`${server_api}login`, {
+            const response = await fetch(`${server_api}/api/auth/login`, {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
+                credentials : 'include' // this tells broswer to allow saving cookies 
             })
 
             const data = await response.json()

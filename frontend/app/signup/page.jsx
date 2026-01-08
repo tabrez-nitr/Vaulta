@@ -1,10 +1,12 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/router';
 
 function Page() {
     // 1. State to manage form input values
+    // const router = useRouter();
     const [formData, setFormData] = useState({
-        username: '',
+        name: '',
         email: '',
         password: ''
     });
@@ -13,7 +15,7 @@ function Page() {
     const [isLoading, setIsLoading] = useState(false);
     const [message, setMessage] = useState('');
 
-    const server_api = process.env.NEXT_PUBLIC_SERVER_API || 'http://localhost:8000/'
+    const server_api = process.env.NEXT_PUBLIC_SERVER_API || 'http://localhost:8000'
 
     // 2. Handle input changes dynamically
     const handleChange = (e) => {
@@ -33,7 +35,7 @@ function Page() {
         try {
             // 3. Changed method to POST to send data to backend
             // Appended 'signup' to the endpoint (adjust based on your actual backend route)
-            const response = await fetch(`${server_api}signup`, { 
+            const response = await fetch(`${server_api}/api/auth/register`, { 
                 method: "POST", 
                 headers: {
                     "Content-Type": "application/json"
@@ -49,6 +51,7 @@ function Page() {
             } else {
                 setMessage('Registration failed. Check console.');
             }
+            useRouter.push('/')
         } catch (error) {
             console.log(error)
             setMessage('Server error. Please try again.');
@@ -74,9 +77,9 @@ function Page() {
                         <label className="text-sm font-medium text-gray-300">Username</label>
                         <input 
                             type="text" 
-                            name="username"
+                            name="name"
                             placeholder="johndoe"
-                            value={formData.username}
+                            value={formData.name}
                             onChange={handleChange}
                             className="bg-neutral-900 border border-white/20 text-white p-3 rounded-lg focus:outline-none focus:border-white transition-colors placeholder-gray-600"
                             required 
