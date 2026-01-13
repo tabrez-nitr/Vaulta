@@ -2,25 +2,17 @@
 import { verifyToken } from "../services/jwtService.js"; 
 
 const authMiddleware = (req, res, next) => {
-  // Step 1: Get Authorization header
-  const authHeader = req.headers["authorization"];
-  if (!authHeader) {
-    return res.status(401).json({ message: "No token provided" });
-  }
-
-  // Step 2: Extract token from format 'Bearer <token>'
-  const token = authHeader.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Malformed token" });
-  }
-
-  try {
+     
+    //check if token is present 
+    const token = req.cookies.token;
+    if(!token)
+        res.status(401).json({message:"NO token , authorization denied "})
+    
+    try {
     // Step 3: Verify token using jwtService
     const decoded = verifyToken(token);
-
     // Step 4: Attach decoded user info to request object
     req.user = decoded;
-
     // Proceed to next middleware or route handler
     next();
   } catch (err) {

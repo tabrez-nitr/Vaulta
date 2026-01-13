@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Finance Tracker",
+  title: "Vaulta",
   description: "Finance Your Expenses Daily",
 };
 
