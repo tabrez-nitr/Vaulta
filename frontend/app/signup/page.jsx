@@ -51,7 +51,7 @@ function Page() {
             } else {
                 setMessage('Registration failed. Check console.');
             }
-            useRouter.push('/')
+            // useRouter.push('/')
         } catch (error) {
             console.log(error)
             setMessage('Server error. Please try again.');

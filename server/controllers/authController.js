@@ -62,10 +62,10 @@ const login = async(req,res)=>{
             sameSite: 'strict', // Protects against CSRF
             maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
          })
-       res.json({message:"Login successful", user:{name : user.name , id : user._id, email : user.email}})
+       return  res.json({message:"Login successful", user:{name : user.name , id : user._id, email : user.email}})
 
     }catch(error){ 
-        res.status(500).json({message:"Internal server error"})
+      return   res.status(500).json({message:"Internal server error"})
     }
 }
 

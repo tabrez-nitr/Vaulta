@@ -5,14 +5,16 @@ const authMiddleware = (req, res, next) => {
      
     //check if token is present 
     const token = req.cookies.token;
+    console.log(token)
     if(!token)
-        res.status(401).json({message:"NO token , authorization denied "})
+       return res.status(401).json({message:"NO token , authorization denied "})
     
     try {
     // Step 3: Verify token using jwtService
     const decoded = verifyToken(token);
     // Step 4: Attach decoded user info to request object
     req.user = decoded;
+    console.log(req.user)
     // Proceed to next middleware or route handler
     next();
   } catch (err) {

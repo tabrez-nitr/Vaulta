@@ -4,16 +4,16 @@ import * as PageController from "../controllers/pageController.js"
 const pageRouter = router()
 
 //get all pages 
-pageRouter.get('/pages',PageController.getAllPages)
+pageRouter.get('/all',PageController.getAllPages)
 
 //delete a page 
-pageRouter.delete('/page/:pageId',PageController.deletePage)
+pageRouter.delete('/:pageId',PageController.deletePage)
 
 //update a page 
-pageRouter.put('/page/:pageId',PageController.updatePage)
+pageRouter.put('/:pageId',PageController.updatePage)
 
 //create a page 
-pageRouter.post('/page/create',PageController.createPage)
+pageRouter.post('/create',PageController.createPage)
 
 export default pageRouter
 
