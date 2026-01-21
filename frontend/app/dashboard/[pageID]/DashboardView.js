@@ -1,12 +1,14 @@
+// app/dashboard/[pageId]/DashboardView.js
 'use client'
+
 import React, { useMemo } from 'react'
 import { ArrowDownLeft, ArrowUpRight, Wallet, Plus, TrendingUp, TrendingDown, Clock, Trash2, Pencil } from 'lucide-react'
 import { useTransactions } from '@/context/TransactionContext'
 
-export default function DashboardPage() {
-    const { transactions, openAddModal, openEditModal, deleteTransaction } = useTransactions()
+export default function DashboardView({ transactions = [] }) {
+    const { openAddModal, openEditModal, deleteTransaction } = useTransactions()
 
-    // Derived State: Calculate totals from transactions array
+    // Derived State
     const { total, credit, debit } = useMemo(() => {
         return transactions.reduce((acc, curr) => {
             if (curr.type === 'credit') {
@@ -21,20 +23,19 @@ export default function DashboardPage() {
     }, [transactions])
 
     return (
-        // 1. Main Background: Pure black to match the sidebar
+        // Main Container: Matches the black background of the sidebar
         <div className="p-8 font-sans space-y-8 min-h-screen bg-black text-white">
             
             {/* Header */}
             <header className="flex items-center justify-between">
                 <div>
-                    {/* 2. Typography: Removed gradients, used bold white + zinc subtitle */}
                     <h1 className="text-2xl font-bold tracking-tight text-white">
                         Dashboard
                     </h1>
                     <p className="text-zinc-500 text-sm mt-1">Overview of your finances</p>
                 </div>
                 
-                {/* 3. Primary Button: High contrast White button (Linear style) */}
+                {/* Primary Action: High contrast White button */}
                 <button
                     onClick={openAddModal}
                     className="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 font-medium py-2.5 px-5 rounded-xl transition-all duration-200 active:scale-95 border border-transparent"
@@ -46,7 +47,6 @@ export default function DashboardPage() {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                
                 {/* Total Balance Card */}
                 <div className="bg-black border border-zinc-800 p-6 rounded-2xl hover:border-zinc-600 transition-all duration-300 group relative overflow-hidden">
                     <div className="relative z-10 flex items-start justify-between">
@@ -56,14 +56,16 @@ export default function DashboardPage() {
                                 ${total.toLocaleString()}
                             </h2>
                         </div>
-                        <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg group-hover:bg-white group-hover:text-black transition-colors text-zinc-400">
+                        <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg group-hover:bg-white group-hover:text-black transition-colors">
                             <Wallet className="w-5 h-5" />
                         </div>
                     </div>
+                    {/* Subtle glow effect behind the card */}
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/5 blur-3xl rounded-full pointer-events-none"></div>
                 </div>
-
+                
                 {/* Credit Card */}
-                <div className="bg-black border border-zinc-800 p-6 rounded-2xl hover:border-zinc-600 transition-all duration-300 group">
+                 <div className="bg-black border border-zinc-800 p-6 rounded-2xl hover:border-zinc-600 transition-all duration-300 group">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Credit</p>
@@ -71,15 +73,14 @@ export default function DashboardPage() {
                                 +${credit.toLocaleString()}
                             </h2>
                         </div>
-                        {/* Icon: Only lights up green on hover */}
                         <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 group-hover:text-green-400 transition-colors">
                             <ArrowDownLeft className="w-5 h-5" />
                         </div>
                     </div>
                 </div>
 
-                {/* Debit Card */}
-                <div className="bg-black border border-zinc-800 p-6 rounded-2xl hover:border-zinc-600 transition-all duration-300 group">
+                 {/* Debit Card */}
+                 <div className="bg-black border border-zinc-800 p-6 rounded-2xl hover:border-zinc-600 transition-all duration-300 group">
                     <div className="flex items-start justify-between">
                         <div>
                             <p className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Total Debit</p>
@@ -87,7 +88,6 @@ export default function DashboardPage() {
                                 -${debit.toLocaleString()}
                             </h2>
                         </div>
-                        {/* Icon: Only lights up red on hover */}
                         <div className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 group-hover:text-red-400 transition-colors">
                             <ArrowUpRight className="w-5 h-5" />
                         </div>
@@ -95,7 +95,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {/* Transactions Section */}
+            {/* Transactions List */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between px-1">
                     <h2 className="text-lg font-semibold text-white">Recent Transactions</h2>
@@ -111,15 +111,14 @@ export default function DashboardPage() {
                         <div className="w-12 h-12 bg-zinc-900 border border-zinc-800 rounded-xl flex items-center justify-center mx-auto mb-4 text-zinc-500">
                             <Clock className="w-6 h-6" />
                         </div>
-                        <h3 className="text-sm font-medium text-white">No transactions yet</h3>
-                        <p className="text-zinc-500 text-sm mt-1">Add your first income or expense to get started</p>
+                        <h3 className="text-sm font-medium text-white">No transactions found</h3>
+                        <p className="text-zinc-500 text-sm mt-1">Create your first entry to activate the dashboard.</p>
                     </div>
                 ) : (
                     <div className="space-y-2">
                         {transactions.map((tx) => (
                             <div
-                                key={tx.id}
-                                // 4. List Items: Subtler borders, darker backgrounds
+                                key={tx._id}
                                 className="bg-black border border-zinc-800 p-4 rounded-xl flex items-center justify-between hover:bg-zinc-900/50 hover:border-zinc-700 transition-all duration-200 group"
                             >
                                 <div className="flex items-center gap-4">
@@ -135,10 +134,11 @@ export default function DashboardPage() {
                                     </div>
                                     <div>
                                         <h3 className="text-sm font-medium text-white group-hover:text-white transition-colors">
-                                            {tx.description}
+                                            {tx.note || tx.description}
                                         </h3>
-                                        {/* Date in monospace font for technical feel */}
-                                        <p className="text-xs text-zinc-500 mt-0.5 font-mono">{tx.date}</p>
+                                        <p className="text-xs text-zinc-500 mt-0.5 font-mono">
+                                            {new Date(tx.createdAt).toLocaleDateString()}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -148,19 +148,17 @@ export default function DashboardPage() {
                                         {tx.type === 'credit' ? '+' : '-'}${tx.amount.toLocaleString()}
                                     </div>
 
-                                    {/* Edit/Delete Actions: Invisible until hover */}
+                                    {/* Action buttons - Hidden until hover */}
                                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                         <button
                                             onClick={() => openEditModal(tx)}
                                             className="p-1.5 text-zinc-500 hover:text-white hover:bg-zinc-800 rounded-md transition-colors"
-                                            title="Edit"
                                         >
                                             <Pencil className="w-3.5 h-3.5" />
                                         </button>
                                         <button
-                                            onClick={() => deleteTransaction(tx.id)}
+                                            onClick={() => deleteTransaction(tx._id)}
                                             className="p-1.5 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-md transition-colors"
-                                            title="Delete"
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>

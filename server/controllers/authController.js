@@ -1,4 +1,5 @@
 import User from "../models/User.js";
+import Profile from "../models/profile.js"
 import { hashPassword,comparePassword } from "../services/hashService.js";
 import { generateToken } from "../services/jwtService.js";
 
@@ -26,7 +27,8 @@ const register = async(req,res)=>{
         const user = new User({name,email,password:hashedPassword})
         // save this to db
         console.log(user)
-        await user.save()
+        const newuser = await user.save()
+        console.log(newuser)
 
         res.status(201).json({message:"User registered successfully"})
 

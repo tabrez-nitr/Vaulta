@@ -18,9 +18,9 @@ export function TransactionProvider({ children }) {
 
     const addTransaction = (transactionData) => {
         const newTransaction = {
-            id: Date.now(),
-            ...transactionData,
-            date: new Date().toLocaleDateString('en-US', {
+                id: Date.now(),
+                ...transactionData,
+                date: new Date().toLocaleDateString('en-US', {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
