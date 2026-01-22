@@ -28,13 +28,23 @@ const register = async(req,res)=>{
         // save this to db
         console.log(user)
         const newuser = await user.save()
-        console.log(newuser)
+        
+        const profile = new Profile({name,email,userId : user._id})
+        console.log(profile)
 
+        const newprofile = await profile.save()
+        console.log(newprofile)
+
+        const fetchprofile = await Profile.findOne({userId : user._id})
+        console.log(fetchprofile)
+        
+         
         res.status(201).json({message:"User registered successfully"})
 
     }
     catch(error){
-        res.status(500).json({message:"Internal server error"})
+        console.log("error in the register controller ", error)
+       return res.status(500).json({message:"Internal server error"})
     }
 }
 
@@ -71,4 +81,20 @@ const login = async(req,res)=>{
     }
 }
 
-export {register,login}
+
+const logout = async(req,res)=>{
+   
+    try{
+         res.clearCookie('token',{
+            httpOnly : true,
+            secure : true,
+            sameSite : 'strict'
+         }) 
+         return res.json({message : "Logout successful"})
+
+    }catch(error){
+        return res.status(500).json({message : "Internal server error"})
+    }
+}
+
+export {register,login,logout}

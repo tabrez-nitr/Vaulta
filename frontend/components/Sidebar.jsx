@@ -2,26 +2,43 @@
 import React from 'react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Wallet, Plus, Check, X, Pencil, Trash2, ChevronLeft, ChevronRight, Disc } from 'lucide-react'
+import { usePathname , useRouter} from 'next/navigation'
+import { LayoutDashboard, Wallet, Plus, Check, X, Pencil, Trash2, ChevronLeft, ChevronRight, Disc, User, LogOut } from 'lucide-react'
 
 export default function Sidebar({ isOpen = true, toggleSidebar }) {
     const pathname = usePathname()
+    const router = useRouter()
 
     //to enter title of new input 
     const [open, setOpen] = useState(false)
     const [title, setTitle] = useState('')
     const [editingPageId, setEditingPageId] = useState(null)
     const [editTitle, setEditTitle] = useState('')
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
 
     const api_url = process.env.NEXT_PUBLIC_SERVER_API
     const [pages, setPages] = useState([])
 
 
-    //get all pages list 
-    useEffect(() => {
-        const getAllPages = async () => {
-            const api_req = `${api_url}/api/pages/all`
+    const logout = async()=>{
+        const api_req = `${api_url}/api/auth/logout`
+        try {
+            const response = await fetch(api_req, {
+                method: 'POST',
+                credentials: 'include',
+            })
+            if (response.ok) {
+                console.log('Logout successful')
+                router.push('/')
+            }
+        } catch (err) {
+            console.log("Error logging out:", err)
+        }
+    }
+
+
+    const fecthPages = async()=>{
+        const api_req = `${api_url}/api/pages/all`
             try {
                 const response = await fetch(api_req, {
                     method: 'GET',
@@ -36,9 +53,13 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
             } catch (err) {
                 console.log("Error fetching pages:", err)
             }
-        }
-        getAllPages()
+    }
+
+    //get all pages list 
+    useEffect(() => {
+        fecthPages()
     }, [])
+   
 
     // Start editing
     const startEditing = (page) => {
@@ -48,16 +69,19 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
 
     // Handle delete page
     const handleDeletePage = async (id) => {
-        if (!confirm("Are you sure you want to delete this page?")) return;
+        // if (!confirm("Are you sure you want to delete this page?")) return;
 
         try {
-            const response = await fetch(`${api_url}/api/pages/delete`, {
+            const response = await fetch(`${api_url}/api/pages/${id}`, {
                 method: 'DELETE',
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ id })
             })
-            if (response.ok) setPages(pages.filter(p => p._id !== id))
+            if (response.ok) {
+                setPages(pages.filter(p => p._id !== id))
+                console.log(pages)
+            }
+           fecthPages()
         } catch (error) {
             console.log("Error deleting page:", error)
         }
@@ -66,16 +90,19 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
     // Handle update page
     const handleUpdatePage = async (id) => {
         try {
-            const response = await fetch(`${api_url}/api/pages/update`, {
+            console.log(`${api_url}/api/pages/${id}`)
+            const response = await fetch(`${api_url}/api/pages/${id}`, {
                 method: 'PUT',
                 headers: { 'content-type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify({ id, title: editTitle })
+                body: JSON.stringify({ title: editTitle })
             })
             if (response.ok) {
                 setPages(pages.map(p => p._id === id ? { ...p, title: editTitle } : p))
                 setEditingPageId(null)
+                fecthPages()
             }
+
         } catch (error) {
             console.log("Error updating page:", error)
         }
@@ -85,6 +112,7 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
     const handelAddNew = async (e) => {
         e.preventDefault();
         const api_req = `${api_url}/api/pages/create`
+
         try {
             const response = await fetch(api_req, {
                 method: 'POST',
@@ -100,6 +128,7 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
         }
         setTitle("")
         setOpen(false)
+        fecthPages()
     }
 
     const links = [
@@ -161,7 +190,7 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
                 )}
 
                 {/* Pages List Items */}
-                {isOpen && pages.map((page) => (
+                {isOpen && pages &&  pages.map((page) => (
                     <div key={page._id} className="group relative flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-900/50 transition-all text-zinc-400 hover:text-white">
                         
                         {editingPageId === page._id ? (
@@ -248,17 +277,44 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
             </nav>
 
             {/* User Footer - Styled to blend in */}
-            <div className={`p-4 border-t border-zinc-900 ${!isOpen && 'flex justify-center'}`}>
-                <div className={`flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-900/50 transition-colors cursor-pointer ${!isOpen && 'p-0'}`}>
-                    <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs text-white font-medium shrink-0">
-                        S
-                    </div>
-                    {isOpen && (
-                        <div className="overflow-hidden">
-                            <p className="text-sm font-medium text-white truncate">Sam Stabrez</p>
-                            <p className="text-xs text-zinc-500 truncate">Pro Plan</p>
+            <div className="relative">
+                {isProfileMenuOpen && isOpen && (
+                    <div className="absolute bottom-full left-0 mb-2 w-full px-3">
+                         <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-xl shadow-black/50">
+                            <Link 
+                                href="/profile"
+                                onClick={() => setIsProfileMenuOpen(false)}
+                                className="flex items-center gap-3 px-3 py-2.5 text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                            >
+                            <User className="w-4 h-4" />
+                                View Profile
+                            </Link>
+                            <button 
+                                onClick={() => logout()}
+                                className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-zinc-400 hover:text-red-400 hover:bg-zinc-800 transition-colors text-left"
+                            >
+                                <LogOut className="w-4 h-4" />
+                                Logout
+                            </button>
                         </div>
-                    )}
+                    </div>
+                )}
+                
+                <div className={`p-4 border-t border-zinc-900 ${!isOpen && 'flex justify-center'}`}>
+                    <div 
+                        onClick={() => isOpen && setIsProfileMenuOpen(!isProfileMenuOpen)}
+                        className={`flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-900/50 transition-colors cursor-pointer ${!isOpen && 'p-0'} ${isProfileMenuOpen && 'bg-zinc-900/50'}`}
+                    >
+                        <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-xs text-white font-medium shrink-0">
+                            S
+                        </div>
+                        {isOpen && (
+                            <div className="overflow-hidden">
+                                <p className="text-sm font-medium text-white truncate">sams tabrez</p>
+                                <p className="text-xs text-zinc-500 truncate">Pro Plan</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

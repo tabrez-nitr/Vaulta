@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import authMiddleware from './middlewares/authMiddlewares.js'; // Ensure this matches your export
 import pageRouter from './routes/page.js';
 import transactionRouter from './routes/transaction.js';
+import profileRouter from './routes/profile.js';
 
 dotenv.config();
 const app = express();
@@ -47,6 +48,10 @@ app.get('/', (req, res) => {
 app.use('/api/pages',pageRouter)
 //all quaries related to transactions 
 app.use('/api/transactions',transactionRouter)
+//all queries related to profile 
+app.use('/api/profile',profileRouter)
+
+
 
 
 

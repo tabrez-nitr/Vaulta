@@ -21,20 +21,20 @@ export default function DashboardPage() {
     }, [transactions])
 
     return (
-        // 1. Main Background: Pure black to match the sidebar
+        //  Main Background: Pure black to match the sidebar
         <div className="p-8 font-sans space-y-8 min-h-screen bg-black text-white">
             
             {/* Header */}
             <header className="flex items-center justify-between">
                 <div>
-                    {/* 2. Typography: Removed gradients, used bold white + zinc subtitle */}
+                    {/*  Typography: Removed gradients, used bold white + zinc subtitle */}
                     <h1 className="text-2xl font-bold tracking-tight text-white">
                         Dashboard
                     </h1>
                     <p className="text-zinc-500 text-sm mt-1">Overview of your finances</p>
                 </div>
                 
-                {/* 3. Primary Button: High contrast White button (Linear style) */}
+                {/*  Primary Button: High contrast White button (Linear style) */}
                 <button
                     onClick={openAddModal}
                     className="flex items-center gap-2 bg-white text-black hover:bg-zinc-200 font-medium py-2.5 px-5 rounded-xl transition-all duration-200 active:scale-95 border border-transparent"
@@ -119,7 +119,7 @@ export default function DashboardPage() {
                         {transactions.map((tx) => (
                             <div
                                 key={tx.id}
-                                // 4. List Items: Subtler borders, darker backgrounds
+                                //  List Items: Subtler borders, darker backgrounds
                                 className="bg-black border border-zinc-800 p-4 rounded-xl flex items-center justify-between hover:bg-zinc-900/50 hover:border-zinc-700 transition-all duration-200 group"
                             >
                                 <div className="flex items-center gap-4">

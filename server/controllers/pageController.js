@@ -40,12 +40,19 @@ const getAllPages = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error" })
     }
 }
+
+
+
 const updatePage = async (req, res) => {
+    
     const { title } = req.body;
     const { pageId } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.id;
+    console.log("1 : update page hit")
+    console.log("2 : pageId",pageId)
+    console.log("3 : userId",userId)
+    console.log("4 : title",title)
     try {
-
         const updatedPage = await Page.findOneAndUpdate({ _id: pageId, userId },
             req.body,
             {
@@ -55,7 +62,7 @@ const updatePage = async (req, res) => {
         if (!updatedPage)
             return res.status(404).json({ message: "Page Not Found " })
 
-        res.status(200).json({ message: "page updated successfully" })
+        res.status(200).json({ message: "Page Updated Successfully" })
 
 
     } catch (error) {
@@ -85,7 +92,7 @@ const deletePage = async (req, res) => {
             return res.status(404).json({ message: "Transactions Not Found" })
 
     } catch (error) {
-        res.status(500).json({ message: "internal server error" })
+        res.status(500).json({ message: "Internal Server Error" })
     }
 }
 

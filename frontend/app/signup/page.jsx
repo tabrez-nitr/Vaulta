@@ -1,10 +1,11 @@
 'use client'
 import React, { useState } from 'react'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 function Page() {
     // 1. State to manage form input values
-    // const router = useRouter();
+    const router = useRouter();
+    
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -51,7 +52,7 @@ function Page() {
             } else {
                 setMessage('Registration failed. Check console.');
             }
-            // useRouter.push('/')
+            router.push('/dashboard')
         } catch (error) {
             console.log(error)
             setMessage('Server error. Please try again.');
