@@ -4,6 +4,7 @@ import Transactions from "../models/Transactions.js";
 
 //creat new transactions 
 const createTransaction = async(req,res)=>{
+    console.log("add new transaction hit")
     try{
 
     // take req inputs from here 
@@ -42,13 +43,17 @@ const createTransaction = async(req,res)=>{
 
 
 const getAllTransactions =async(req,res)=>{
+    console.log("1 Get all transaction hit")
     try{
       // get input 
       const  {pageId} = req.params
-      const userId = req.user._id
+      const userId = req.user.id
+      console.log("2 pageId",pageId)
+      console.log("3 userId",userId)
     
        // get user 
-      const user = await Page.findOne({id: pageId, userId})
+      const user = await Page.findOne({_id: pageId, userId})
+      console.log("4 user",user)
       if(!user)
       {
         return res.status(404).json({message : "No such page exists"})
@@ -57,18 +62,20 @@ const getAllTransactions =async(req,res)=>{
       //get all trabsactions of one page 
       const transactions = await Transactions.find({pageId}).sort({createdAt : -1})
 
-      res.status(200).json(transactions)
+      console.log("transactions",transactions)
+      return res.status(200).json({message: "Transactions fetched successfully", transactions})
 
 
     }catch(error){
         console.log(error)
-        res.status(404).json({message: "can not find transactions"})
+        return res.status(404).json({message: "can not find transactions"})
     }
 }
 
 
 //delete transaction 
 const deleteTransaction = async(req,res)=>{
+    console.log()
     try{
         //get input 
         const {userId} = req.user._id;

@@ -16,6 +16,7 @@ export function TransactionProvider({ children }) {
     // Load from local storage on mount (optional but good for persistence in simple apps)
     // For now we'll stick to in-memory as per original, but can be easily extended.
 
+
     const addTransaction = (transactionData) => {
         const newTransaction = {
                 id: Date.now(),
@@ -30,6 +31,27 @@ export function TransactionProvider({ children }) {
         }
         setTransactions(prev => [newTransaction, ...prev])
         setIsModalOpen(false)
+    }
+
+    const fetchTransactions = async (pageId) => {
+        console.log("Fetching transactions for page:", pageId)
+        try{
+            const api_url = process.env.NEXT_PUBLIC_SERVER_API;
+            const response = await fetch(`${api_url}/api/transactions/getTransactions/${pageId}`,{
+                credentials : 'include',
+                headers : {
+                    'content-type' : 'application/json',
+                    'accept' : 'application/json',
+                }
+            })
+            if(!response.ok) return
+            const data = await response.json()
+            console.log("Data received from API:", data)
+            setTransactions(data)
+        }catch(error)
+        {
+            console.log("Error fetching transactions:", error)
+        }
     }
 
     const editTransaction = (transactionData) => {
@@ -80,7 +102,8 @@ export function TransactionProvider({ children }) {
         deleteTransaction,
         openAddModal,
         openEditModal,
-        closeModal
+        closeModal,
+        fetchTransactions
     }
 
     return (

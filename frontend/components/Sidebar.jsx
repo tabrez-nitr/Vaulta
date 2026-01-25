@@ -3,6 +3,7 @@ import React from 'react'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { usePathname , useRouter} from 'next/navigation'
+import { useTransactions } from '@/context/TransactionContext'
 import { LayoutDashboard, Wallet, Plus, Check, X, Pencil, Trash2, ChevronLeft, ChevronRight, Disc, User, LogOut } from 'lucide-react'
 
 export default function Sidebar({ isOpen = true, toggleSidebar }) {
@@ -16,6 +17,8 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
     const [editTitle, setEditTitle] = useState('')
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false)
 
+    //to fetch data based on page id
+    const {fetchTransactions} = useTransactions()
     const api_url = process.env.NEXT_PUBLIC_SERVER_API
     const [pages, setPages] = useState([])
 
@@ -80,8 +83,9 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
             if (response.ok) {
                 setPages(pages.filter(p => p._id !== id))
                 console.log(pages)
+                fecthPages()
             }
-           fecthPages()
+          
         } catch (error) {
             console.log("Error deleting page:", error)
         }
@@ -136,8 +140,10 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
     ]
 
     return (
-        // Sidebar Container: Changed border-white to border-zinc-800 for subtle contrast
-        <div className={`${isOpen ? 'w-64' : 'w-20'} border-r border-zinc-800 bg-black flex flex-col h-screen fixed left-0 top-0 transition-all duration-300 z-50`}>
+        // Sidebar Container: 
+        // Mobile: Fixed off-screen (-translate-x-full) when closed, slide-in (translate-x-0) when open. Always w-64.
+        // Desktop: Always visible (md:translate-x-0). Width toggles between md:w-64 and md:w-20.
+        <div className={`fixed left-0 top-0 h-screen z-50 bg-black border-r border-zinc-800 flex flex-col transition-all duration-300 w-64 ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 md:${isOpen ? 'w-64' : 'w-20'}`}>
             
             {/* Logo Area */}
             <div className={`p-6 flex items-center ${isOpen ? 'justify-between' : 'justify-center flex-col gap-4'}`}>
@@ -191,7 +197,10 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
 
                 {/* Pages List Items */}
                 {isOpen && pages &&  pages.map((page) => (
-                    <div key={page._id} className="group relative flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-900/50 transition-all text-zinc-400 hover:text-white">
+                    //on click get all transactions of that page and set it to the transactions state
+                    <div
+                    onClick={()=>{fetchTransactions(page._id);}}
+                     key={page._id} className="group relative flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-zinc-900/50 transition-all text-zinc-400 hover:text-white">
                         
                         {editingPageId === page._id ? (
                             <div className="flex flex-1 items-center gap-2 bg-black border border-zinc-800 rounded p-1">
@@ -211,13 +220,12 @@ export default function Sidebar({ isOpen = true, toggleSidebar }) {
                             </div>
                         ) : (
                             <>
-                                <Link
-                                    href={`/dashboard/${page._id}`}
-                                    className="flex-1 flex items-center gap-3 overflow-hidden"
+                                <div
+                                    className="flex-1 flex items-center gap-3 overflow-hidden cursor-pointer"
                                 >
                                     <div className="w-1.5 h-1.5 rounded-full bg-zinc-800 group-hover:bg-white transition-colors shrink-0" />
                                     <span className="text-sm truncate">{page.title || 'Untitled'}</span>
-                                </Link>
+                                </div>
                                 
                                 {/* Edit Actions - Only visible on hover */}
                                 <div className="absolute right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">

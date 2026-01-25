@@ -3,6 +3,7 @@ import Transactions from "../models/Transactions.js";
 
 
 const createPage = async (req, res) => {
+    console.log("createPage hit")
     const { title } = req.body;
     const userId = req.user.id;
     console.log(userId)
@@ -44,6 +45,7 @@ const getAllPages = async (req, res) => {
 
 
 const updatePage = async (req, res) => {
+    console.log("updatePage hit")
     
     const { title } = req.body;
     const { pageId } = req.params;
@@ -72,6 +74,7 @@ const updatePage = async (req, res) => {
     }
 }
 const deletePage = async (req, res) => {
+    console.log("deletePage hit")
 
     const { pageId } = req.params;
 
@@ -86,13 +89,16 @@ const deletePage = async (req, res) => {
         if (!deletedPage)
             return res.status(404).json({ message: "Page Not Found" })
 
+        console.log("Page Deleted Successfully")
         // delete all transaction of that page as well 
         const deletedTransactions = await Transactions.deleteMany({ pageId })
         if (!deletedTransactions)
             return res.status(404).json({ message: "Transactions Not Found" })
-
+        
+        return res.status(200).json({message : "Page Deleted Successfully"})
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" })
+        console.log(error)
+        return res.status(500).json({ message: "Internal Server Error" })
     }
 }
 

@@ -45,7 +45,7 @@ export default function Home() {
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                 v2.0 is now live
             </div>
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500 pb-2">
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-b from-white to-zinc-500 pb-2">
             Master Your Money <br /> with Vaulta
           </h1>
           <p className="text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
@@ -71,9 +71,9 @@ export default function Home() {
 
         {/* Hero Visual/Dashboard Mockup */}
         <div className="mt-20 max-w-5xl mx-auto relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10 opacity-50"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black via-transparent to-transparent z-10 opacity-50"></div>
             <div className="rounded-xl border border-zinc-800 bg-zinc-900/30 backdrop-blur p-2 shadow-2xl shadow-zinc-900/50">
-                 <div className="rounded-lg bg-black border border-zinc-900 aspect-[16/9] overflow-hidden relative flex items-center justify-center group">
+                 <div className="rounded-lg bg-black border border-zinc-900 aspect-video overflow-hidden relative flex items-center justify-center group">
                     <div className="text-zinc-700 text-lg font-mono flex flex-col items-center gap-4 opacity-50 group-hover:opacity-80 transition-opacity duration-700">
                         <BarChart3 className="w-16 h-16" />
                         <span>Interactive Dashboard Preview</span>
