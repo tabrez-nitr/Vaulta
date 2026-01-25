@@ -4,22 +4,28 @@ import Transactions from "../models/Transactions.js";
 
 //creat new transactions 
 const createTransaction = async(req,res)=>{
-    console.log("add new transaction hit")
+    console.log(" 1 - add new transaction hit")
     try{
 
     // take req inputs from here 
     const {amount , type , note} = req.body;
+
+    console.log("2 - amount , type , note",amount , type , note)
     //get the page id from the url 
     const {pageId} = req.params
-    const userId = req.user._id
+    const userId = req.user.id
 
+    console.log("3 - pageId",pageId)
+    console.log("4 - userId",userId)
     //check if page exists and belong to the same user 
     const page = await Page.findOne({_id : pageId , userId})
    
+    console.log("5 - page",page)
     if(!page){
         return res.status(404).json({message:"Page not found"})
     }
 
+    console.log("6 - page",page)
      const transaction = new Transactions({
         amount,
         type,
@@ -27,8 +33,8 @@ const createTransaction = async(req,res)=>{
         pageId
      })
      await transaction.save()
-
-     res.status(201).json({message:"Transaction created Successfully"})
+     console.log("7 - transaction",transaction)
+     return res.status(201).json({message:"Transaction created Successfully",transaction})
 
 
 

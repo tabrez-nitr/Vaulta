@@ -6,7 +6,7 @@ import { useTransactions } from '@/context/TransactionContext'
 export default function DashboardPage() {
     const { transactions: rawData, openAddModal, openEditModal, deleteTransaction } = useTransactions()
 
-    // 1. Data Normalization (The Fix)
+    //  Data Normalization (The Fix)
     // We check if the incoming data is already an array. If not, we look for the .transactions property inside it.
     // If both fail, we fallback to an empty list [] to prevent crashes.
     const transactions = useMemo(() => {
@@ -15,7 +15,7 @@ export default function DashboardPage() {
         return [];
     }, [rawData]);
 
-    // 2. Derived State: Calculate totals using the safe 'transactions' array
+    //  Derived State: Calculate totals using the safe 'transactions' array
     const { total, credit, debit } = useMemo(() => {
         return transactions.reduce((acc, curr) => {
             // Ensure amount is treated as a number

@@ -3,8 +3,13 @@ import * as TransactionController from '../controllers/transactionController.js'
 
 const transactionRouter = router()
 
+
+transactionRouter.get('/',(req,res)=>{
+    console.log("testing route hit ")
+    return res.status(200).json({message : "testing route hit"})
+})
 //create new transaction 
-transactionRouter.post('/addTransacition',TransactionController.createTransaction)
+transactionRouter.post('/add/:pageId',TransactionController.createTransaction)
 //get all transactions of a page
 transactionRouter.get('/getTransactions/:pageId',TransactionController.getAllTransactions)
 //delete a transaction from a page 

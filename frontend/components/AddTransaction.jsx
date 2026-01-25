@@ -1,11 +1,14 @@
 'use client'
 import React, { useState, useEffect } from 'react'
 import { X, Check, DollarSign, ArrowDownLeft, ArrowUpRight } from 'lucide-react'
+import { useTransactions } from '@/context/TransactionContext'
 
-function AddTransaction({ isOpen, onClose, onSave, initialData = null }) {
+function AddTransaction({ isOpen, onClose, initialData = null }) {
     const [amount, setAmount] = useState('')
     const [description, setDescription] = useState('')
     const [type, setType] = useState('credit') // 'credit' or 'debit'
+
+    const {addNewTransaction, } = useTransactions()
 
     // Reset or populate form when modal opens or initialData changes
     useEffect(() => {
@@ -27,13 +30,37 @@ function AddTransaction({ isOpen, onClose, onSave, initialData = null }) {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (!amount || !description) return
+         
+        // 1 save new transaction if no id is present or pass 
+        // 2 update transaction if id is present
+        // 3 close the modal
 
-        onSave({
-            _id: initialData?._id, // Ensure we pass the ID for updates
-            amount: parseFloat(amount),
-            description,
-            type
-        })
+        //if no id is present save new transaction
+        if(!initialData){
+            addNewTransaction({
+              amount: parseFloat(amount),
+              note :  description,
+              type
+            })
+        }
+
+        //send to edit and put 
+        // addPreTransaction({
+        //     id: initialData?._id,
+        //     amount: parseFloat(amount),
+        //     description,
+        //     type
+        // })
+
+       
+        // onSave({
+        //     _id: initialData?._id, // Ensure we pass the ID for updates
+        //     amount: parseFloat(amount),
+        //     description,
+        //     type
+        // })
+
+        //close the modal
         onClose()
     }
 
