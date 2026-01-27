@@ -1,126 +1,137 @@
 'use client'
-import React, { useState } from 'react'
-import Link from 'next/link' // Importing Link for navigation if you have a signup page route
+import React from 'react'
+import Link from 'next/link'
+import { Wallet, Mail, Lock, ArrowRight } from 'lucide-react'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-function Page() {
-    // 1. State for Login Credentials
-    const [formData, setFormData] = useState({
-        email: '',
-        password: ''
-    });
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
 
-    const server_api = process.env.NEXT_PUBLIC_SERVER_API || 'http://localhost:8000'
+export default function SignIn() {
+     const router = useRouter()
+     const [email , setEmail] = useState('')
+     const [password , setPassword] = useState('')
 
-    // 2. Handle Input Change
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value
-        });
-    }
+     const [error , setError] = useState(false)
 
-    // 3. Handle Login Submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setIsLoading(true);
-        setError('');
-        try {
-            // Sending POST request to /login endpoint
-            const response = await fetch(`${server_api}/api/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
-                credentials : 'include' // this tells broswer to allow saving cookies 
-            })
-
-            const data = await response.json()
-            console.log(data);
-
-            if (response.ok) {
-                // Success logic (e.g., store token, redirect)
-                alert("Login Successful!"); 
-                // router.push('/dashboard') -> You would typically redirect here
-            } else {
-                setError(data.message || 'Invalid credentials');
-            }
-        } catch (err) {
-            console.log(err)
-            setError('Something went wrong. Please try again.');
-        } finally {
-            setIsLoading(false);
+     const handelLogin = async(e) => {
+        e.preventDefault()
+        if(email === "" || password === ""){
+            console.log("Email or password is required")
+            setError(true)
+            return
         }
-    }
+        setError(false)
+        const formData = {
+            email,
+            password
+        }
+        try{
+            const api_url = process.env.NEXT_PUBLIC_SERVER_API
+            const response = await axios.post(`${api_url}/auth/login`, formData,{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials : true
+            })
+            console.log(response.data)
+            router.push('/dashboard')
+        }catch(error){
+            console.log(error)
+        }
 
-    return (
-        <div className="min-h-screen bg-black flex items-center justify-center p-4">
-            
-            {/* Card Container */}
-            <div className="w-full max-w-md bg-black border border-white/30 rounded-2xl p-8 shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-                
-                <h1 className="text-3xl font-bold text-white mb-2 text-center">Welcome Back</h1>
-                <p className="text-gray-400 text-center mb-8">Please enter your details</p>
+     }
+  return (
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black flex items-center justify-center relative overflow-hidden">
+      {/* Background Gradients */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-160 h-160 bg-zinc-800/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-160 h-160 bg-zinc-800/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    
-                    {/* Email Input */}
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-gray-300">Email</label>
-                        <input 
-                            type="email" 
-                            name="email"
-                            placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className="bg-neutral-900 border border-white/20 text-white p-3 rounded-lg focus:outline-none focus:border-white transition-colors placeholder-gray-600"
-                            required 
-                        />
-                    </div>
+      {/* Grid Pattern Overlay */}
+      <div className="absolute inset-0 z-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[50px_50px] mask-[radial-gradient(ellipse_at_center,black_40%,transparent_100%)]"></div>
 
-                    {/* Password Input */}
-                    <div className="flex flex-col gap-2">
-                        <label className="text-sm font-medium text-gray-300">Password</label>
-                        <input 
-                            type="password" 
-                            name="password"
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={handleChange}
-                            className="bg-neutral-900 border border-white/20 text-white p-3 rounded-lg focus:outline-none focus:border-white transition-colors placeholder-gray-600"
-                            required 
-                        />
-                    </div>
-
-                    {/* Forgot Password & Error Display */}
-                    <div className="flex justify-between items-center text-sm">
-                        <span className="text-red-400 min-h-[20px]">{error}</span>
-                        <a href="#" className="text-gray-400 hover:text-white transition-colors">Forgot Password?</a>
-                    </div>
-
-                    {/* Submit Button */}
-                    <button 
-                        type="submit" 
-                        disabled={isLoading}
-                        className="mt-2 bg-white text-black font-bold py-3 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {isLoading ? 'Signing In...' : 'Sign In'}
-                    </button>
-                </form>
-
-                {/* Toggle to Sign Up */}
-                <p className="mt-8 text-center text-gray-400 text-sm">
-                    Don't have an account?{' '}
-                    <Link href="/signup" className="text-white font-semibold hover:underline">
-                        Sign up for free
-                    </Link>
-                </p>
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-md px-6">
+        {/* Logo/Header */}
+        <div className="mb-8 text-center space-y-4">
+          <Link href="/" className="inline-flex items-center justify-center group">
+             <div className="relative">
+                 <div className="absolute inset-0 bg-white blur-lg opacity-20 rounded-full group-hover:opacity-40 transition-opacity duration-500"></div>
+                 <div className="bg-black border border-zinc-800 p-3 rounded-xl relative z-10 group-hover:border-zinc-700 transition-colors duration-300">
+                    <Wallet className="w-6 h-6 text-white" />
+                </div>
             </div>
+          </Link>
+          <h1 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-b from-white to-zinc-500">
+            Welcome Back
+          </h1>
+          <p className="text-zinc-500 text-sm">
+            Enter your credentials to access your vault.
+          </p>
         </div>
-    )
-}
 
-export default Page
+        {/* Form Card */}
+        <div className="bg-zinc-900/30 backdrop-blur-xl border border-zinc-800/50 rounded-2xl p-8 shadow-2xl ring-1 ring-white/5">
+          <form className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 ml-1">Email</label>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-white transition-colors">
+                  <Mail className="w-5 h-5" />
+                </div>
+                <input 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}    
+                  type="email" 
+                  placeholder="name@example.com"
+                  className="w-full bg-black/40 border border-zinc-800 rounded-lg py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition-all"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+               <div className="flex items-center justify-between ml-1">
+                 <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500">Password</label>
+                 <a href="#" className="text-xs text-zinc-500 hover:text-white transition-colors">Forgot password?</a>
+               </div>
+              <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-zinc-500 group-focus-within:text-white transition-colors">
+                  <Lock className="w-5 h-5" />
+                </div>
+                <input 
+                 value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password" 
+                  placeholder="••••••••"
+                  className="w-full bg-black/40 border border-zinc-800 rounded-lg py-3 pl-10 pr-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-600 focus:ring-1 focus:ring-zinc-600 transition-all"
+                />
+              </div>
+            </div>
+
+            <button 
+              type="submit"
+              className="w-full bg-white text-black font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 hover:bg-zinc-200 transition-all active:scale-[0.98] group"
+              onClick={handelLogin}
+            >
+              Sign In
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </form>
+
+          {/* Footer */}
+          <div className="mt-8 text-center">
+            <p className="text-zinc-500 text-sm">
+              New to Vaulta?{' '}
+              <Link href="/signup" className="text-white font-medium hover:underline decoration-zinc-500 decoration-1 underline-offset-4 transition-all">
+                Create an account
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

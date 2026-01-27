@@ -2,9 +2,11 @@
 import { verifyToken } from "../services/jwtService.js"; 
 
 const authMiddleware = (req, res, next) => {
+     console.log("auth middleware hit ")
      
     //check if token is present 
     const token = req.cookies.token;
+    console.log("token is ")
     console.log(token)
     if(!token)
        return res.status(401).json({message:"NO token , authorization denied "})

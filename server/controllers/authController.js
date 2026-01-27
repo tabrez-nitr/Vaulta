@@ -84,6 +84,7 @@ const login = async(req,res)=>{
 
 //logout the user 
 const logout = async(req,res)=>{
+    console.log("logout route hit ")
    
     try{
             res.clearCookie('token',{
