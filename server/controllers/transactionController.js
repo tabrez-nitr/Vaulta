@@ -1,6 +1,7 @@
 import Transaction from "../models/Transactions.js";
-import Page from "../models/Page.js";
+import Page from "../models/page.js";
 import Transactions from "../models/Transactions.js";
+import mongoose from "mongoose";
 
 //creat new transactions 
 const createTransaction = async(req,res)=>{
@@ -8,12 +9,14 @@ const createTransaction = async(req,res)=>{
     try{
 
     // take req inputs from here 
-    const {amount , type , note} = req.body;
+    const {amount , type , note , date} = req.body;
 
     console.log("2 - amount , type , note",amount , type , note)
     //get the page id from the url 
     const {pageId} = req.params
     const userId = req.user.id
+    console.log("pageId",pageId)
+    console.log("userId",userId)
 
     console.log("3 - pageId",pageId)
     console.log("4 - userId",userId)
@@ -30,6 +33,7 @@ const createTransaction = async(req,res)=>{
         amount,
         type,
         note,
+        date,
         pageId
      })
      await transaction.save()
@@ -81,22 +85,28 @@ const getAllTransactions =async(req,res)=>{
 
 //delete transaction 
 const deleteTransaction = async(req,res)=>{
-    console.log()
+    console.log("1-delete transaction hit ")
     try{
         //get input 
-        const {userId} = req.user._id;
+        const userId = req.user.id;
         const {pageId , transactionId} = req.params;
+        console.log("2-pageId",pageId)
+        console.log("userId",userId)
+        console.log("3-transactionId",transactionId)
 
         //check if page exists and belong to the same user 
-        const page = await Page.findOne({_id : pageId , userId})
-
+        const page = await Page.findOne({
+            _id : pageId , 
+            userId : new mongoose.Types.ObjectId(userId)
+        })
+        console.log("4-page",page)
         if(!page){
             return res.status(404).json({message:"Page not found"})
         }
           
         //delete the req transaction 
-        const deletedTransaction = await Transactions.findOneAndDelete({_id : transactionId})
-
+        const deletedTransaction = await Transactions.findByIdAndDelete({_id : transactionId})
+        console.log("5-deletedTransaction",deletedTransaction)
         if(!deletedTransaction){
             return res.status(404).json({message:"Transaction not found"})
         }
@@ -111,11 +121,16 @@ const deleteTransaction = async(req,res)=>{
 }
 
 const updateTransaction = async(req,res)=>{
+    console.log("update transaction hit ")
     try{
 
         //get input 
-        const {userId} = req.user._id;
+        const userId = req.user.id;
         const {pageId , transactionId} = req.params;
+
+        console.log("user id : ",userId)
+        console.log("page id : ",pageId)
+        console.log("transaction id : ",transactionId)
 
         //check if page exists and belong to the same user 
         const page = await Page.findOne({_id : pageId , userId})

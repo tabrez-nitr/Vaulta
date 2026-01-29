@@ -18,16 +18,16 @@ import {
 } from 'lucide-react'
 import { useTransactionContext } from '@/context/TransactionContext'
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed, setCollapsed }) => {
   const pathname = usePathname()
-  const [collapsed, setCollapsed] = useState(false)
+
 
   // Create new page state
   const [newPage, setNewPage] = useState("")
   const [newPageOpen, setNewPageOpen] = useState(false)
 
   // Context data
-  const { pages, create_page , delete_page, edit_page } = useTransactionContext()
+  const { pages, create_page , delete_page, edit_page , currentPage , setCurrentPage } = useTransactionContext()
 
   // Handle create new page
   const handleCreatePage = async (e) => {
@@ -224,24 +224,24 @@ const Sidebar = () => {
               }
 
               return (
-                <Link
+                <div
                   key={page._id}
-                  href={pageHref}
+                  onClick={() => setCurrentPage(page._id)}
                   className={`relative flex items-center justify-between rounded-lg transition-all group ${
                     collapsed ? 'justify-center px-2 py-3' : 'gap-3 px-3 py-2.5'
                   } ${
-                    active 
+                    currentPage === page._id
                     ? 'bg-zinc-900 text-white' 
                     : 'text-zinc-400 hover:bg-zinc-900/60 hover:text-white'
                   }`}
                   title={collapsed ? page.title : ''}
                 >
-                   {active && (
+                   {currentPage === page._id && (
                     <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r bg-white shadow-[0_0_12px_rgba(255,255,255,0.6)]" />
                   )}
 
                   <div className="flex items-center gap-3 overflow-hidden">
-                    <ArrowRightLeft className={`h-5 w-5 shrink-0 ${active ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`} />
+                    <ArrowRightLeft className={`h-5 w-5 shrink-0 ${currentPage === page._id ? 'text-white' : 'text-zinc-400 group-hover:text-white'}`} />
                     {!collapsed && (
                       <span className="text-sm font-medium truncate">
                         {page.title}
@@ -266,7 +266,7 @@ const Sidebar = () => {
                       </button>
                     </div>
                   )}
-                </Link>
+                </div>
               )
             })}
           </div>

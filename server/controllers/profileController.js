@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import Profile from "../models/profile.js";
 
 const editProfile = async(req,res)=>{
-    const {name , email , phoneNumber , profilePicture } = req.body;
+    const { name , email , phoneNumber , profilePicture } = req.body;
     const userId = req.user._id;
     try{
         const user = await User.findOne({userId})

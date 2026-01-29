@@ -1,4 +1,4 @@
-import Page from "../models/Page.js";
+import Page from "../models/page.js";
 import Transactions from "../models/Transactions.js";
 
 
@@ -15,6 +15,7 @@ const createPage = async (req, res) => {
         const page = new Page({ title, userId })
         const savedPage = await page.save()
         console.log(savedPage)
+        console.log("Page Created Successfully")
         return res.status(201).json({ message: "Page Created Successfully" })
     }
     catch (error) {
@@ -22,6 +23,8 @@ const createPage = async (req, res) => {
         return res.status(500).json({ message: "internal Server error" })
     }
 }
+
+
 
 const getAllPages = async (req, res) => {
     console.log("getAllPages hit")

@@ -38,7 +38,7 @@ const register = async(req,res)=>{
         const fetchprofile = await Profile.findOne({userId : user._id})
         console.log(fetchprofile)
         
-         
+        
         res.status(201).json({message:"User registered successfully"})
 
     }

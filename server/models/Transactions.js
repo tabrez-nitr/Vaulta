@@ -19,6 +19,10 @@ const transactionSchema = new mongoose.Schema({
         ref : "Page",
         required : true
     },
+    date : {
+        type : Date,
+        default : Date.now
+    }
    
     
 }, {timestamps : true})
