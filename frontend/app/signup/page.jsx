@@ -51,7 +51,7 @@ export default function SignUp() {
 
 
     }catch(error){
-        console.log(error)
+        console.log("Error While Creating User",error)
         setServerError(true)
         return
     }

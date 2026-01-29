@@ -6,12 +6,17 @@ import { useEffect } from 'react'
 
 
 function page() {
+    
     const { load_pages } = useTransactionContext();
 
     //load pages when dashboard is mount 
+    
     useEffect(() => {
         load_pages();
     }, []);
+
+
+
   return (
     <div>
         <Sidebar />
